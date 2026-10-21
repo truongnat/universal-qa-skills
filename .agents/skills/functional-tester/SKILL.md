@@ -1,6 +1,6 @@
 ---
 name: functional-tester
-description: "Critical user journey verification. Use this skill to plan, verify, or review functional tester in any software project."
+description: "Critical user journey and business-flow verification. Use for functional user journeys in any software project. Deliverables must use markdown tables, headings, and bullet lists per bundled report-output-format."
 ---
 
 # functional-tester
@@ -8,58 +8,53 @@ description: "Critical user journey verification. Use this skill to plan, verify
 **Purpose:** Critical user journey verification. Technology agnostic: web, native, mobile, API, CLI, infrastructure and data workloads are in scope only when applicable.
 
 ## Mandatory testing contract
-1. Read project-level instructions, architecture and requirements before testing. Identify technology, supported platforms, release scope and critical risks.
-2. Choose relevant cases by likelihood × impact. Record exclusions and N/A with reasons. Never claim that every catalog entry applies.
-3. For each chosen case produce **precondition, fixture, action/steps, expected independent oracle, cleanup, priority, and evidence**.
-4. Cover applicable variants: happy path, invalid inputs, min/max boundaries, repeated operations, interrupted/cancelled operations, concurrent access, persistence/restart, compatibility and accessibility.
-5. Run only authorized non-destructive checks using available tools. Tests that could affect production, external targets or secrets must be blocked pending authorization.
-6. Record actual execution, version, command, environment, logs, captures and test data. Static code inspection does not count as runtime visual/functional PASS.
-7. Report findings with reproducibility, severity, confidence and a candidate regression test. Return NOT TESTED/BLOCKED when evidence is missing.
-8. Follow the bundled reference templates and avoid invented screenshots, defects, CVEs or measurements.
+Read and apply bundled `references/mandatory-contract.md`, `references/quality-standard.md`, and `references/report-output-format.md` before testing or reporting.
 
-## Output
-- Risk and scope inventory with applicable standards
-- Test design matrix: ID | technique | preconditions | steps | independent expected result | status | evidence
-- Confirmed findings (actual/expected, severity, reproduction) separate from hypothetical risks
-- Coverage gaps and blocked checks
-- Prioritized regression backlog
+## Report presentation (required)
+All results, matrices, defect logs, gap analyses, and release assessments must follow **`references/report-output-format.md`** and, when executing a run, **`references/execution-report-template.md`**. Use **markdown tables** for counts and traceability, **headed sections** for narrative, and **bullets or numbered lists** for steps and actions. Do not deliver wall-of-text-only output.
+
+## Output artifacts
+| Artifact | Format |
+|---|---|
+| Risk & scope inventory | Table + short bullets |
+| Test design / execution matrix | Table (see report-output-format) |
+| Confirmed findings | Defect table + repro steps |
+| Hypothetical risks | Separate table or subsection |
+| Coverage gaps / blockers | Table |
+| Regression backlog | Prioritized table |
+| Final checklist | From `references/verification-checklist.md` |
 
 ## Scenario catalog
 
-Each row is a scenario-design prompt, **not** an executed or runnable automated test. Expand to atomic cases and provide a real oracle before reporting PASS.
+Each row is a scenario-design prompt, **not** an executed test. Expand using `references/scenario-expansion-guide.md` before marking PASS.
 
-| Case | Scenario | Coverage variants | Evidence to capture |
-|---|---|---|---|
-| FUNC-001 | First run and onboarding | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-002 | Create valid entity | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-003 | Create invalid entity | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-004 | Duplicate record handling | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-005 | Read missing record | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-006 | Read unauthorized record | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-007 | Update valid record | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-008 | Update conflict | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-009 | Delete confirmation | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-010 | Delete recovery | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-011 | Search exact case | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-012 | Search Unicode | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-013 | Filter combinations | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-014 | Sorting stability | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-015 | Pagination boundaries | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-016 | Bulk actions | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-017 | Import malformed rows | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-018 | Export fidelity | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-019 | Unsaved state protection | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-020 | Session expiry | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-021 | Offline to online recovery | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-022 | Background cancellation | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-023 | Restart persistence | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
-| FUNC-024 | Multi-user collaboration | Test valid/invalid, boundary, repeat and interruption variants as applicable. | Logs, observed state, fixture and reproduction |
+| Case | Scenario focus |
+|---|---|
+| FUNC-001 | First run and onboarding |
+| FUNC-002 | Create valid entity |
+| FUNC-003 | Create invalid entity |
+| FUNC-004 | Duplicate record handling |
+| FUNC-005 | Read missing record |
+| FUNC-006 | Read unauthorized record |
+| FUNC-007 | Update valid record |
+| FUNC-008 | Update conflict |
+| FUNC-009 | Delete confirmation |
+| FUNC-010 | Delete recovery |
+| FUNC-011 | Search exact case |
+| FUNC-012 | Search Unicode |
+| FUNC-013 | Filter combinations |
+| FUNC-014 | Sorting stability |
+| FUNC-015 | Pagination boundaries |
+| FUNC-016 | Bulk actions |
+| FUNC-017 | Import malformed rows |
+| FUNC-018 | Export fidelity |
+| FUNC-019 | Unsaved state protection |
+| FUNC-020 | Session expiry |
+| FUNC-021 | Offline to online recovery |
+| FUNC-022 | Background cancellation |
+| FUNC-023 | Restart persistence |
+| FUNC-024 | Multi-user collaboration |
 
 ## Verification checklist
-- [ ] Scope, roles, tech stack and test basis verified
-- [ ] Risk-based scenario selection and N/A reasons documented
-- [ ] Expected and actual results independently evaluated
-- [ ] Real execution versus static inspection distinguished
-- [ ] Confirmed findings backed by repeatable evidence
-- [ ] Blockers and coverage gaps preserved
-- [ ] Regression and release impact recommended
+Copy items from `references/verification-checklist.md` into the final report with honest checkbox marks.
+

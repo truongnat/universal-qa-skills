@@ -7,3 +7,5 @@ Evidence classifications: CONFIRMED (reproduced), LIKELY (static trace), RISK (h
 Severity: S0 catastrophic, S1 serious loss/security/key journey failure, S2 material degradation, S3 cosmetic. Priority P0–P3 is urgency, not severity.
 
 Never fabricate tests, screenshots, timings, compliance or tool results. Never touch production destructively or reveal secrets. Distinguish source inspection and real interactive testing.
+
+All written deliverables must follow `report-output-format.md`: markdown tables for matrices and gates, clear headings, and bullet lists for steps—not unstructured prose-only reports.

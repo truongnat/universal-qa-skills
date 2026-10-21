@@ -16,3 +16,6 @@ Task ID, worker role, exact objective, paths or flows, requirements and risk IDs
 
 ## Merge
 Only the QA Lead issues final overall risk assessment. Deduplicate by root cause and reproduction; disputed issues require independent confirmation. Never confuse an unexecuted case with a passed test. Each worker returns PASS/FAIL/BLOCKED/NOT TESTED/N/A records with evidence.
+
+## Report format
+Workers and QA Lead must format handoffs and the merged report per bundled `references/report-output-format.md` (tables for matrices, defects, gates, and counts; bullets for actions). See `docs/sample-release-assessment.md` in the repository for a full example.

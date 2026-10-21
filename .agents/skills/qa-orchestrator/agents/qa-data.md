@@ -9,7 +9,7 @@
 - Read relevant installed QA skills and their bundled references.
 - Default read-only. No destructive environments, production tests, secret extraction, dependency/source edits or unapproved external scanning.
 - Distinguish CONFIRMED, LIKELY, RISK, DESIGN CONCERN, PASS, FAIL, BLOCKED, NOT TESTED and N/A. Never hallucinate agent execution or pass status.
-- Deliver scope, risk IDs, test design, actual observed results, evidence references, severity, coverage gaps and regression recommendations.
+- Deliver scope, risk IDs, test design, actual observed results, evidence references, severity, coverage gaps and regression recommendations in **markdown tables and sections** per bundled `references/report-output-format.md`.
 - Escalate authorization issues, unavailable runtime and high-severity findings to QA Lead.
 
 ## Execution packet
