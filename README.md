@@ -112,6 +112,10 @@ Deliverables must use **structured markdown**: **tables** for matrices, defects,
 - Canonical shared files: `.agents/skills/_shared/references/` (copied into each skill via `python3 scripts/maintain_repo.py sync`).
 - CI: `python3 scripts/maintain_repo.py validate` (also runs on push via GitHub Actions).
 
+## Principles & mechanisms
+
+Skills embed research-aligned guidance (ISTQB, ISO 29119/25010, oracles/heuristics). Each skill ships **`references/domain-playbook.md`** and **`references/scenario-catalog.md`**. **50 high-risk scenario IDs** have extra-deep P0 specs (all SECU-*, plus selected FUNC/API/DATA)—see `scripts/skill_depth/scenario_overrides.json`. Overview: [`docs/principles-and-mechanisms.md`](docs/principles-and-mechanisms.md).
+
 ## Standards
 
 Based on principles and techniques from ISO/IEC/IEEE 29119, ISO/IEC 25010, ISTQB CTFL, WCAG 2.2, OWASP ASVS/MASVS and ISO 9241, when applicable. These references do not confer certification.

@@ -118,83 +118,15 @@ def parse_scenarios(text: str) -> list[tuple[str, str]]:
     return rows
 
 
-def build_skill_md(name: str, purpose: str, scenarios: list[tuple[str, str]], extra: str) -> str:
-    tagline, focus = SKILL_META.get(
-        name,
-        (purpose.rstrip("."), name.replace("-", " ")),
-    )
-    desc = (
-        f"{tagline} Use for {focus} in any software project. "
-        "Deliverables must use markdown tables, headings, and bullet lists per bundled report-output-format."
-    )
-    scenario_lines = "\n".join(f"| {cid} | {title} |" for cid, title in scenarios)
-    return f"""---
-name: {name}
-description: "{desc}"
----
-
-# {name}
-
-**Purpose:** {purpose}
-
-## Mandatory testing contract
-Read and apply bundled `references/mandatory-contract.md`, `references/quality-standard.md`, and `references/report-output-format.md` before testing or reporting.
-
-## Report presentation (required)
-All results, matrices, defect logs, gap analyses, and release assessments must follow **`references/report-output-format.md`** and, when executing a run, **`references/execution-report-template.md`**. Use **markdown tables** for counts and traceability, **headed sections** for narrative, and **bullets or numbered lists** for steps and actions. Do not deliver wall-of-text-only output.
-
-## Output artifacts
-| Artifact | Format |
-|---|---|
-| Risk & scope inventory | Table + short bullets |
-| Test design / execution matrix | Table (see report-output-format) |
-| Confirmed findings | Defect table + repro steps |
-| Hypothetical risks | Separate table or subsection |
-| Coverage gaps / blockers | Table |
-| Regression backlog | Prioritized table |
-| Final checklist | From `references/verification-checklist.md` |
-
-## Scenario catalog
-
-Each row is a scenario-design prompt, **not** an executed test. Expand using `references/scenario-expansion-guide.md` before marking PASS.
-
-| Case | Scenario focus |
-|---|---|
-{scenario_lines}
-
-## Verification checklist
-Copy items from `references/verification-checklist.md` into the final report with honest checkbox marks.
-{extra}
-"""
-
-
 def reshape_skills() -> list[str]:
-    errors: list[str] = []
-    for skill_dir in sorted(SKILLS.iterdir()):
-        if not skill_dir.is_dir() or skill_dir.name.startswith("_"):
-            continue
-        skill_path = skill_dir / "SKILL.md"
-        if not skill_path.is_file():
-            errors.append(f"No SKILL.md in {skill_dir.name}")
-            continue
-        text = skill_path.read_text(encoding="utf-8")
-        name_m = FRONT_NAME_RE.search(text)
-        purpose_m = PURPOSE_RE.search(text)
-        if not name_m or not purpose_m:
-            errors.append(f"Could not parse name/purpose in {skill_path}")
-            continue
-        name = name_m.group(1)
-        purpose = purpose_m.group(1).strip()
-        scenarios = parse_scenarios(text)
-        if not scenarios:
-            errors.append(f"No scenarios in {skill_path}")
-            continue
-        extra = ORCHESTRATOR_TAIL if name == "qa-orchestrator" else ""
-        skill_path.write_text(
-            build_skill_md(name, purpose, scenarios, extra),
-            encoding="utf-8",
-        )
-    return errors
+    """Regenerate domain depth (playbooks, scenario catalogs, SKILL bodies)."""
+    import subprocess
+
+    script = ROOT / "scripts" / "generate_skill_depth.py"
+    proc = subprocess.run([sys.executable, str(script)], capture_output=True, text=True)
+    if proc.returncode != 0:
+        return [proc.stdout + proc.stderr or "generate_skill_depth failed"]
+    return []
 
 
 def file_hash(path: Path) -> str:
@@ -214,6 +146,21 @@ def validate() -> list[str]:
             errors.append(f"{skill_dir.name}: missing report-output-format reference")
         if "mandatory-contract.md" not in text:
             errors.append(f"{skill_dir.name}: missing mandatory-contract reference")
+        if "testing-principles.md" not in text:
+            errors.append(f"{skill_dir.name}: missing testing-principles reference")
+        if "domain-playbook.md" not in text:
+            errors.append(f"{skill_dir.name}: missing domain-playbook reference")
+        if "scenario-catalog.md" not in text:
+            errors.append(f"{skill_dir.name}: missing scenario-catalog reference")
+        refs_depth = [
+            skill_dir / "references" / "domain-playbook.md",
+            skill_dir / "references" / "scenario-catalog.md",
+        ]
+        for p in refs_depth:
+            if not p.is_file():
+                errors.append(f"{skill_dir.name}: missing {p.name}")
+            elif p.stat().st_size < 500:
+                errors.append(f"{skill_dir.name}: {p.name} too small (regenerate depth)")
         n = len(parse_scenarios(text))
         total += n
         refs = skill_dir / "references"
@@ -230,6 +177,15 @@ def validate() -> list[str]:
     readme = ROOT / "README.md"
     if readme.is_file() and str(expected_scenarios) not in readme.read_text():
         errors.append("README missing scenario count 356")
+    overrides_path = ROOT / "scripts" / "skill_depth" / "scenario_overrides.json"
+    if overrides_path.is_file():
+        import json
+
+        ov = json.loads(overrides_path.read_text(encoding="utf-8"))
+        if len(ov) < 50:
+            errors.append(f"scenario_overrides.json has {len(ov)} entries, need 50")
+    else:
+        errors.append("missing scripts/skill_depth/scenario_overrides.json")
     return errors
 
 
